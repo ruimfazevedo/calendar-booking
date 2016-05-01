@@ -5,6 +5,7 @@
 <link href='./fullcalendar-2.7.0/fullcalendar.css' rel='stylesheet' />
 <link href='./fullcalendar-2.7.0/fullcalendar.print.css' rel='stylesheet' media='print' />
 <link href="./fullcalendar-2.7.0/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<link href="./fullcalendar-2.7.0/bootstrap/css/bootstrap-theme.min.css" rel="stylesheet">
 <script src='./fullcalendar-2.7.0/lib/moment.min.js'></script>
 <script src='./fullcalendar-2.7.0/lib/jquery.min.js'></script>
 <script src='./fullcalendar-2.7.0/fullcalendar.min.js'></script>
@@ -16,44 +17,44 @@
 	$(document).ready(function() {
 
 		var eventClassNames = {
-			'Cycling': 'rgb(228,244,250)',
-			'Crossfit': 'rgb(169,210,106)',
-			'Pilates': 'rgb(204,204,0)'
+			'Cycling': 'rgb(58,135,173)',
+			'Crossfit': 'orange',
+			'Pilates': 'red'
 		};
 	
 		$('#calendar').fullCalendar({
 			header: {
 				left: 'prev,next today',
 				center: 'title',
-				right: 'month,agendaWeek,agendaDay'
+				right: 'agendaWeek,agendaDay'
 			},
+			defaultView:"agendaWeek",
+			allDaySlot: false,
 
 			googleCalendarApiKey: 'AIzaSyCMKw5zGwJUsOsx-QkDH-qmwwlRimgOCsA',
 			eventSources: [
 		        {
 		            googleCalendarId: 'ct7doppqpllgcj4vfk7kjifvf8@group.calendar.google.com',
-		            backgroundColor: 'green',
 		            editable: true
 		        }
 			],
 			eventRender: function(event, element) {
-        		element.css("background-color", (eventClassNames[event.title]));
+        		element.css("background-color", (eventClassNames[event.title]) || "blue" );
+        		element.css("opacity", 0.65);
     		},
 			
-			eventClick: function(event) {
-				// opens events in a popup window
-				window.open(event.url, 'gcalevent', 'width=700,height=600');
-				return false;
-			},
+			eventClick:  function(event, jsEvent, view) {
+	            $('#modalTitle').html(event.title);
+	            $('#modalBody').html(event.description || "");
+	            $('#eventUrl').attr('href',event.url);
+	            $('#fullCalModal').modal({
+	            	closeText: "Fechar"
+	            });
+	            return false;
+        	},
 			
 			loading: function(bool) {
 				$('#loading').toggle(bool);
-			},
-			dayClick: function(date) {
-				console.log('dayClick', date.format());
-			},
-			select: function(startDate, endDate) {
-				console.log('select', startDate.format(), endDate.format());
 			}
 		});
 		
@@ -88,6 +89,28 @@
 	<div id='loading'>loading...</div>
 
 	<div id='calendar'></div>
+
+	<div id="fullCalModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">×</span> <span class="sr-only">Fechar</span></button>
+                <h4 id="modalTitle" class="modal-title"></h4>
+            </div>
+            <div id="modalBody" class="modal-body"></div>
+            <div class="container form-inline">
+	            <div id="modalNrPersonsAllowed" class="form-group">
+	  				<label for="usr">Número de vagas</label>
+	  				<input type="text" class="form-control" id="usr" value ="13">
+				</div>
+			</div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button class="btn btn-success" data-dismiss="modal">Reservar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 </body>
 </html>
