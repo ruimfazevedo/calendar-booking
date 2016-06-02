@@ -1,0 +1,8 @@
+div.user-area
+  // user has logged in
+  if user
+    div.login-form-inline
+      form.form-inline(action="/users/logout", method="get")
+        span Hello #{user.alias}
+        button.btn.btn-default(type="submit")
+          span.glyphicon.glyphicon-off(aria-hidden="true")

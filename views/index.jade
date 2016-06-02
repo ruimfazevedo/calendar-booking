@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  if !user
+    div.main-content
+      div.logo-container
+        p.main-logo
+    div.container
+      form.form-signin(action="/users/login", method="post")
+        h2.form-signin-heading Please sign in
+        label.sr-only(for="login-id-input") ID
+        input.form-control(type="text", id="login-id-input" name="id", label="id", placeholder="ID or Alias", required, autofocus)
+        label.sr-only(for="login-password-input") Password
+        input.form-control(type="password", id="login-password-input", name="password", label="password", placeholder="Password", required)
+        button.btn.btn-lg.btn-primary.btn-block(type="submit") Login    
